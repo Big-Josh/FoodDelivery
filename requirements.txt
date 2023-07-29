@@ -3,4 +3,5 @@ numpy
 sklearn
 optuna
 seaborn
+scikit-learn
 -e .
