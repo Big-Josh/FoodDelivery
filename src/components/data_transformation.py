@@ -8,9 +8,11 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
+from src.utils import save_object
+from dataclasses import dataclass
 
 
-
+@dataclass
 class DataTransformationConfig:
     transformer_path = os.path.join('artifacts','transformer.pkl')
 
@@ -83,22 +85,23 @@ class DataTransformation:
 
             logging.info('Done Transforminng Input data')
 
-            
-            train_array = np.concatenate(( input_train_array, np.array(train_target_data))
-                                         ,axis = None)
-        
+            #Reshaping Target data
+            output_train = np.array(train_target_data)
+            output_test  = np.array(test_target_data)
 
-            test_array = np.concatenate(( input_test_array, np.array(test_target_data))
-                                        , axis =None)
-               
+            output_train_array= np.reshape(output_train, (-1, 1))
+            output_test_array= np.reshape(output_test, (-1, 1))
+            
+            train_array = np.hstack((input_train_array , output_train_array))
+
+            test_array = np.hstack((input_test_array, output_test_array))
             
 
             logging.info('Done converting train and test data into  array')
 
-
             return (
-                train_array,
-                test_array
+                    train_array,
+                    test_array 
             )
         
         except Exception as e:

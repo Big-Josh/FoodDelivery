@@ -4,4 +4,8 @@ sklearn
 optuna
 seaborn
 scikit-learn
+dill
+xgboost
+catboost
+lightgbm
 -e .
