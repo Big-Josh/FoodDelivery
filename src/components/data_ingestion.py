@@ -4,11 +4,8 @@ from src.logger import logging
 from src.exception import CustomException
 import pandas as pd
 import numpy as np
-
 from sklearn.model_selection import train_test_split
-
-
-#from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformation
 
 
 class DataIngestionConfig:
@@ -117,7 +114,6 @@ if __name__ == "__main__":
     obj = DataIngestion()
     trail = obj.extract_data()
     train_path, test_path = obj.clean_data(trail)
-    print(train_path, test_path)
-#     data_transformation = DataTransformation()
-#     train_arr, test_arr, _ =data_transformation.feature_engineering(train_path, test_path)
-#     print(train_arr.shape)
+    data_transformation = DataTransformation()
+    train_arr, test_arr  =data_transformation.feature_engineering(train_path, test_path)
+    print(train_arr, test_arr)
