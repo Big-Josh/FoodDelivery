@@ -14,6 +14,7 @@ from catboost import CatBoostRegressor
 from lightgbm import LGBMRegressor
 from xgboost import XGBRegressor
 from src.utils import evaluate_models
+from sklearn.metrics import mean_squared_error
 from dataclasses import dataclass
 
 @dataclass
@@ -26,27 +27,36 @@ class ModelTrainer:
         self.model_path = ModelTrainerConfig()
 
 
-    def initiate_model_trainer(self, train_array, test_array):
-        try:
-            logging.info('Splitting into X_train, X_test, y_train, y_test')
+    def initiate_model_trainer(self, input_train_array, input_test_array, output_train_array, output_test_array):
+            
+        logging.info('Splitting into X_train, X_test, y_train, y_test')
 
-            X_train = train_array[:,:-1]
-            y_train = train_array[:,-1]
-            X_test = test_array[:,:-1]
-            y_test = test_array[:,-1]
+        X_train = input_train_array
+        X_test = input_test_array
+        y_train = output_train_array.ravel()
+        y_test = output_test_array.ravel()
 
-            models = {
-                'RandomForest' : RandomForestRegressor(),
-                'AdaBoost' : AdaBoostRegressor(),
-                'CatBoost' : CatBoostRegressor(),
-                'XGBoost' : XGBRegressor(),
-                'LGBM' : LGBMRegressor()
-            }
+        models = {
+              'CatBoost' : CatBoostRegressor(),
+            'RandomForest' : RandomForestRegressor(),
+            'AdaBoost' : AdaBoostRegressor(),
+             'XGBoost' : XGBRegressor(),
+            'LGBM' : LGBMRegressor()
+        }
+        
+        # model = RandomForestRegressor()
+        logging.info('{}'.format(X_test.shape))
 
-            model_report = evaluate_models(X_train, X_test, y_train, y_test, models)
+        
+                     
+        logging.info('Model is Training')
 
-            logging.info('Model Training Done')
-                                    
-            return model_report
-        except Exception as e:
-            raise CustomException(e ,sys)
+        logging.info('Model Training Done')
+
+        #outsample_predictions = model.predict(X_train)
+
+        #error = np.sqrt(mean_squared_error(y_train, outsample_predictions))
+
+        model_report = evaluate_models(X_train, X_test, y_train, y_test, models)
+                     
+        return model_report

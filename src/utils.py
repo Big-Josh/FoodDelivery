@@ -22,31 +22,25 @@ def save_object(file_path, obj):
 
 
 def evaluate_models(X_train, X_test, y_train, y_test, models):
-    try:
-        report = {}
-        for i in len(list(models)):
-            model = list(models.values())[i]
-            model_name  = list(models.key())[i]
+    report = {}
+    for i in range(len(list(models))):
+        model = list(models.values())[i]
+        model_name  = list(models.keys())[i]
 
-            Model = model.fit(X_train, y_train)
-            logging.info('Done traininng {} model'.format(model_name))
+        Model = model.fit(X_train, y_train)
+        logging.info('Done traininng {} model'.format(model_name))
 
-            #Making predcitions
+        #Making predcitions
+        insample_predictions = Model.predict(X_train)
+        outsample_predictions = Model.predict(X_test)
 
-            insample_predictions = model.predict(X_train)
-            outsample_predictions = model.predict(X_test)
+        #Computing Errors
+        train_error = np.sqrt(mean_squared_error(y_train, insample_predictions))
+        test_error  = np.sqrt(mean_squared_error(y_test, outsample_predictions))
 
+        error_list = [train_error, test_error]
+        logging.info('Done computing errors')
 
-            #Computing Errors
-            train_error = np.sqrt(mean_squared_error(y_train, insample_predictions))
-            test_error  = np.sqrt(mean_squared_error(y_test, outsample_predictions))
-            error_list = [train_error, test_error]
+        report[model_name] = error_list
 
-            logging.info('Done computing errors')
-
-
-            report[model_name] = error_list
-
-            return report
-    except Exception as e:
-        raise CustomException(e,sys)
+    return report

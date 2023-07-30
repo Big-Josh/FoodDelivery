@@ -97,7 +97,7 @@ class DataIngestion:
 
             logging.info('Initiating Train Test Split')
 
-            Train_df , Test_df = train_test_split(cleaned_df , test_size = 0.25, random_state = 27)
+            Train_df , Test_df = train_test_split(cleaned_df , test_size = 0.30, random_state = 27)
 
             Train_df.to_csv(self.ingestion_config.train_data_path, index = False, header = True)
             Test_df.to_csv(self.ingestion_config.test_data_path, index = False, header = True)
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     data_path = obj.extract_data()
     train_path, test_path = obj.clean_data(data_path)
     data_transformation = DataTransformation()
-    train_arr, test_arr  =data_transformation.feature_engineering(train_path, test_path)
-    # trainer = ModelTrainer()
-    # report = trainer.initiate_model_trainer(train_arr,test_arr)
-    print(train_arr.shape, test_arr.shape)
+    X_train, X_test, y_train, y_test = data_transformation.feature_engineering(train_path, test_path)
+    trainer = ModelTrainer()
+    report = trainer.initiate_model_trainer(X_train,X_test,y_train,y_test)
+    print(report)

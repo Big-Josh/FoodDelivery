@@ -8,4 +8,5 @@ dill
 xgboost
 catboost
 lightgbm
+optuna
 -e .

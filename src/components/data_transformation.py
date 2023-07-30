@@ -8,6 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
+from sklearn.decomposition import PCA
 from src.utils import save_object
 from dataclasses import dataclass
 
@@ -41,7 +42,8 @@ class DataTransformation:
             )
         
             numerical_pipeline = Pipeline(
-                steps = [('StandardScaling', StandardScaler())]
+                steps = [('StandardScaling', StandardScaler()),
+                        ('PCA', PCA(n_components=4)) ]
             )
         
             logging.info('Pipeline for both numericak and categorical columns created')
@@ -91,17 +93,15 @@ class DataTransformation:
 
             output_train_array= np.reshape(output_train, (-1, 1))
             output_test_array= np.reshape(output_test, (-1, 1))
-            
-            train_array = np.hstack((input_train_array , output_train_array))
 
-            test_array = np.hstack((input_test_array, output_test_array))
-            
 
             logging.info('Done converting train and test data into  array')
 
             return (
-                    train_array,
-                    test_array 
+                input_train_array,
+                input_test_array,
+                output_train_array, 
+                output_test_array
             )
         
         except Exception as e:
