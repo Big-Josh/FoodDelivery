@@ -43,7 +43,7 @@ class DataTransformation:
         
             numerical_pipeline = Pipeline(
                 steps = [('StandardScaling', StandardScaler()),
-                        ('PCA', PCA(n_components=4)) ]
+                        ('PCA', PCA(n_components=5)) ]
             )
         
             logging.info('Pipeline for both numericak and categorical columns created')

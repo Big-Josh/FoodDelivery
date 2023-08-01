@@ -87,17 +87,17 @@ class DataIngestion:
 
             ''' Creating lables for top 30 categories in store_primary_category'''
             cusine = df['store_primary_category'].value_counts().rename_axis('unique_values').reset_index(name='counts')
-            top_30_cat = list(cusine.head(30)['unique_values'].values)
+            top_30_cat = list(cusine.head(25)['unique_values'].values)
             map_dict = {k: v for v, k in enumerate(top_30_cat)}
             df['cusine'] = df['store_primary_category'].map(map_dict)
-            df['cusine'] = df['cusine'].fillna(30)
+            df['cusine'] = df['cusine'].fillna(25)
             df = df.drop(columns  = 'store_primary_category', axis = 1)
 
             logging.info('Done Creating labels for top 30 categories in store_primary_category')
 
             logging.info('Initiating Train Test Split')
 
-            Train_df , Test_df = train_test_split(cleaned_df , test_size = 0.30, random_state = 27)
+            Train_df , Test_df = train_test_split(cleaned_df , test_size = 0.25, random_state = 27)
 
             Train_df.to_csv(self.ingestion_config.train_data_path, index = False, header = True)
             Test_df.to_csv(self.ingestion_config.test_data_path, index = False, header = True)
