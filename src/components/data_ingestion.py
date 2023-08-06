@@ -7,6 +7,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
+from optuna.trial import Trial
 from dataclasses import dataclass
 
 
